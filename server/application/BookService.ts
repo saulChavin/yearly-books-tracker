@@ -7,4 +7,9 @@ export class BookService {
     if (!subjects.length) throw new Error('No subjects provided');
     return this.bookRepo.searchBooksBySubjects(subjects);
   }
+
+  async getBookById(id: string) {
+    if (!id) throw new Error('No book ID provided');
+    return this.bookRepo.getBookById(id);
+  }
 }

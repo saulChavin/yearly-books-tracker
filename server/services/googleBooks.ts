@@ -2,16 +2,10 @@
 // If you were using this outside a Nuxt server handler (e.g. in a Nitro plugin directly),
 // you might import `ofetch` from 'ofetch'.
 
-interface Book {
-  id: string;
-  title: string;
-  authors: string[];
-  cover?: string;
-  publishedDate?: string;
-}
+import { Book } from "../domain/BookRepository";
 
 // Define a type for the expected Google Books API item structure for better type safety
-interface GoogleBookItem {
+export interface GoogleBookItem {
   id: string;
   volumeInfo: {
     title: string;
@@ -26,16 +20,16 @@ interface GoogleBookItem {
   // Add other fields you might need from the item itself
 }
 
-interface GoogleBooksApiResponse {
+export interface GoogleBooksApiResponse {
   items?: GoogleBookItem[];
   // Add other fields from the API response if needed (e.g., totalItems)
 }
 
-export const fetchFromGoogleBooks = async (query: string): Promise<Book[]> => {
+export const fetchFromGoogleBooks = async <T,>(query: string, path?: string) => {
   try {
     // Use $fetch for making the HTTP request
     // $fetch automatically parses JSON and throws errors for non-2xx responses
-    const responseData = await $fetch<GoogleBooksApiResponse>(`https://www.googleapis.com/books/v1/volumes`, {
+    const responseData = await $fetch<T>(`https://www.googleapis.com/books/v1/volumes${path ? `/${path}` : ''}`, {
       params: {
         q: query,
         maxResults: 40, // Limit the number of results
@@ -44,13 +38,7 @@ export const fetchFromGoogleBooks = async (query: string): Promise<Book[]> => {
       }
     });
 
-    return responseData.items?.map((item: GoogleBookItem) => ({
-      id: item.id,
-      title: item.volumeInfo.title,
-      authors: item.volumeInfo.authors || [], // Ensure authors is always an array
-      cover: item.volumeInfo.imageLinks?.thumbnail || item.volumeInfo.imageLinks?.smallThumbnail,
-      publishedDate: item.volumeInfo.publishedDate,
-    })) || [];
+    return responseData;
   } catch (error: any) {
     console.error(`Error fetching books from Google API for query "${query}":`, error.data || error.message || error);
     // You might want to throw a custom error or return an empty array

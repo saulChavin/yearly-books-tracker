@@ -1,3 +1,5 @@
+import { GoogleBookItem } from "../services/googleBooks";
+
 export interface Book {
   id: string;
   title: string;
@@ -7,4 +9,5 @@ export interface Book {
 
 export interface BookRepository {
   searchBooksBySubjects(subjects: string[]): Promise<Book[]>;
+  getBookById(id: string): Promise<GoogleBookItem | null>;
 }
