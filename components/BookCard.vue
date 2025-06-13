@@ -9,9 +9,18 @@ const props = defineProps<{
 		description: string;
 	};
 }>();
+
+// Emits an event when the book card is clicked
+const emit = defineEmits<{
+	(e: 'book-clicked', bookId: string): void;
+}>();
+function handleClick() {
+	emit('book-clicked', props.book.id);
+}
 </script>
 <template>
-	<div class="book-card shadow-sm  shadow-fuchsia-700 p-4 rounded-lg hover:shadow-xl transition-shadow duration-300">
+	<div @click="handleClick"
+		class="book-card shadow-sm  shadow-fuchsia-700 p-4 rounded-lg hover:shadow-xl transition-shadow duration-300">
 		<div class="`book-header flex items-center justify-between mb-2"
 			:style="{ backgroundImage: `url(${props.book.cover})` }">
 			<img :src="props.book.cover" alt="Book Cover" class="book-cover h-14" height="52px" />

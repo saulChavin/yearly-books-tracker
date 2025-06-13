@@ -28,6 +28,11 @@ function buildGoogleBooksSubjectQuery(subjects: string[]): string {
 	return encodeURIComponent(query);
 }
 
+const handleNavigation = (bookId: string) => {
+	// Navigate to the book details page
+	useRouter().push(`/books/${bookId}`);
+};
+
 </script>
 
 
@@ -35,7 +40,7 @@ function buildGoogleBooksSubjectQuery(subjects: string[]): string {
 	<div>My Genres</div>
 	<ul class="flex flex-wrap gap-4">
 		<li v-for="book in recomendedBooks" :key="book.id">
-			<BookCard :book="book" />
+			<BookCard :book="book" @book-clicked="handleNavigation" />
 		</li>
 	</ul>
 </template>
