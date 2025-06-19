@@ -19,6 +19,12 @@ export class GoogleBooksAdapter implements BookRepository {
     console.log('book',book)
     if (!book) return null;
 
-    return book;
+    return {
+      id: book.id,
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors || [],
+      cover: book.volumeInfo.imageLinks?.thumbnail || '',
+      description: book.volumeInfo?.description || '',
+    };
   }
 }

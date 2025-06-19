@@ -14,6 +14,7 @@ export interface GoogleBookItem {
       thumbnail?: string;
       smallThumbnail?: string;
     };
+    description?: string;
     publishedDate?: string;
     // Add other fields you might need from volumeInfo
   };

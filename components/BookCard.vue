@@ -14,21 +14,31 @@ const props = defineProps<{
 const emit = defineEmits<{
 	(e: 'book-clicked', bookId: string): void;
 }>();
+
 function handleClick() {
 	emit('book-clicked', props.book.id);
 }
+
+//save book to reading list in local storage
+function saveToReadingList(book: any) {
+	const readingList = JSON.parse(localStorage.getItem('readingList') || '[]');
+	readingList.push(book);
+	localStorage.setItem('readingList', JSON.stringify(readingList));
+	alert('Book added to reading list!');
+}
+
 </script>
 <template>
-	<div @click="handleClick"
+	<div @click="handleClick" v-if="props.book"
 		class="book-card shadow-sm  shadow-fuchsia-700 p-4 rounded-lg hover:shadow-xl transition-shadow duration-300">
 		<div class="`book-header flex items-center justify-between mb-2"
 			:style="{ backgroundImage: `url(${props.book.cover})` }">
-			<img :src="props.book.cover" alt="Book Cover" class="book-cover h-14" height="52px" />
+			<img :src="props.book?.cover" alt="Book Cover" class="book-cover h-14" height="52px" />
 		</div>
 		<h3 class="book-title">{{ props.book.title }}</h3>
 		<p class="book-authors">{{ props.book.authors.join(', ') }}</p>
 		<p class="book-description">{{ props.book.description }}</p>
-		<button>
+		<button @click="saveToReadingList(props.book)">
 			Add to reading list
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
 				stroke="currentColor" class="w-6 h-6 inline-block">
