@@ -9,6 +9,14 @@ $fetch(`/api/books/${route.params.id}`)
 		console.error('Error fetching book data:', error);
 	});
 
+//save book to reading list in local storage
+function saveToReadingList(book: any) {
+	const readingList = JSON.parse(localStorage.getItem('readingList') || '[]');
+	readingList.push(book);
+	localStorage.setItem('readingList', JSON.stringify(readingList));
+	alert('Book added to reading list!');
+}
+
 </script>
 
 <template>
@@ -18,7 +26,7 @@ $fetch(`/api/books/${route.params.id}`)
 		</button>
 		<h1>{{ book?.volumeInfo?.title }}</h1>
 		<img :src="book?.volumeInfo?.imageLinks?.thumbnail" alt="Book Cover" class="mb-4" />
-		<button>
+		<button @click="saveToReadingList(book)">
 			Add to reading list
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
 				stroke="currentColor" class="w-6 h-6 inline-block">
