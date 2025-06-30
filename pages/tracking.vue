@@ -1,10 +1,28 @@
+<script setup lang="ts">
+const readingList = ref<any[]>([]);
+
+//load local storage reading list
+onMounted(() => {
+	const storedList = localStorage.getItem('readingList');
+	if (storedList) {
+		readingList.value = JSON.parse(storedList);
+	} else {
+		readingList.value = [];
+	}
+});
+</script>
+
+
 <template>
-	<h1>Tracking readed books, to read books and reading books</h1>
-	<div class="flex flex-col items-center justify-center h-screen text-amber-50">
-		<button @click="$router.back()" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">
-			Back to Books
-		</button>
-		<p>Tracking page is under construction.</p>
-		<p>Check out the <a href="/books" class="text-blue-500 underline">Books</a> page for now.</p>
+	<div class="reading-list">
+		<h1 class="text-2xl font-bold mb-4">My Reading List</h1>
+		<ul class="flex flex-wrap gap-4">
+			<li v-for="book in readingList" :key="book.id">
+				<BookCard :book="book" />
+			</li>
+		</ul>
+	</div>
+	<div v-if="readingList.length === 0" class="text-center text-gray-500">
+		<p>Your reading list is empty. Start adding books!</p>
 	</div>
 </template>
