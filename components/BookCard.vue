@@ -27,6 +27,12 @@ function saveToReadingList(book: any) {
 	alert('Book added to reading list!');
 }
 
+// get if the book is already in the reading list
+function isBookInReadingList(bookId: string): boolean {
+	const readingList = JSON.parse(localStorage.getItem('readingList') || '[]');
+	return readingList.some((book: any) => book.id === bookId);
+}
+
 </script>
 <template>
 	<div @click="handleClick" v-if="props.book"
@@ -38,7 +44,7 @@ function saveToReadingList(book: any) {
 		<h3 class="book-title">{{ props.book.title }}</h3>
 		<p class="book-authors">{{ props.book.authors.join(', ') }}</p>
 		<p class="book-description">{{ props.book.description }}</p>
-		<button @click="saveToReadingList(props.book)">
+		<button v-if="!isBookInReadingList(book.id)" @click="saveToReadingList(props.book)">
 			Add to reading list
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
 				stroke="currentColor" class="w-6 h-6 inline-block">
