@@ -10,6 +10,8 @@ const props = defineProps<{
 	};
 }>();
 
+const isInReadingList = ref(false);
+
 // Emits an event when the book card is clicked
 const emit = defineEmits<{
 	(e: 'book-clicked', bookId: string): void;
@@ -33,6 +35,11 @@ function isBookInReadingList(bookId: string): boolean {
 	return readingList.some((book: any) => book.id === bookId);
 }
 
+onMounted(() => {
+	// Check if the book is already in the reading list
+	isInReadingList.value = isBookInReadingList(props.book.id);
+});
+
 </script>
 <template>
 	<div @click="handleClick" v-if="props.book"
@@ -44,12 +51,11 @@ function isBookInReadingList(bookId: string): boolean {
 		<h3 class="book-title">{{ props.book.title }}</h3>
 		<p class="book-authors">{{ props.book.authors.join(', ') }}</p>
 		<p class="book-description">{{ props.book.description }}</p>
-		<button v-if="!isBookInReadingList(book.id)" @click="saveToReadingList(props.book)">
+		<button v-if="!isInReadingList" @click="saveToReadingList(props.book)">
 			Add to reading list
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
 				stroke="currentColor" class="w-6 h-6 inline-block">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+				<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 			</svg>
 		</button>
 	</div>
